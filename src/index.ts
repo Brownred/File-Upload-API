@@ -3,7 +3,7 @@ import path from "path"
 import fs from "fs"
 
 // Third party imports
-import express, { Request, Response, NextFunction} from 'express';
+import express, { Request, Response} from 'express';
 import multer from "multer";
 
 // custom utilities
@@ -12,6 +12,7 @@ import { BAD_REQUEST } from "./constants/http";
 import { MediaType } from "./types/MediaTypes";
 import prepareFileDetails from "./utils/prepareFileDetails";
 import compressImage from "./utils/compressImage";
+import { checkFileValidMW } from "./middlewares/checkFileValid";
 
 
 
@@ -32,16 +33,6 @@ const multerStorage = multer.diskStorage({
 
 
 const upload = multer({storage: multerStorage})
-
-
-// Middleware
-const checkFileValidMW = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.file || !req.file.filename) {
-        res.sendStatus(BAD_REQUEST)
-    }
-    next()
-}
-
 
 
 // Routes
